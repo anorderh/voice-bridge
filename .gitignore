@@ -1,6 +1,3 @@
-# recasepunc, until integration is figured out
-recasepunc/
-
 # IntelliJ
 *.iws
 workspace.xml
