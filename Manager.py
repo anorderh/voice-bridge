@@ -1,4 +1,3 @@
-from queue import Queue
 import whisper
 from Microphone import Microphone
 import Transcription as tr
