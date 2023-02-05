@@ -11,12 +11,11 @@ AUDIO_FORMAT = pyaudio.paInt16
 SAMPLE_SIZE = 2
 
 class Microphone:
-    def __init__(self):
-        self.state = Queue()  # Tracks when recording is ON and OFF
-        self.storedAudio = b""
+    def __init__(self, manager):
+        self.manager = manager
 
     def start_recording(self):
-        self.state.put(True)  # Ping for recording to initiate
+        self.manager.appState.put(True)  # Ping for recording to initiate
 
         # Begin recording
         print("Starting...")
@@ -28,7 +27,7 @@ class Microphone:
         record.start()
 
     def stop_recording(self):
-        self.state.get()  # Ping for recording to stop
+        self.manager.appState.get()  # Ping for recording to stop
         print("Stopped.")
 
     def record_microphone(self, chunk=1024):  # Reading 1024 frames at a time
@@ -41,9 +40,9 @@ class Microphone:
                         input_device_index=3,  # Input device, use 'Devices.py' to utilize it
                         frames_per_buffer=chunk)
 
-        while not self.state.empty():  # Recording is ongoing
+        while not self.manager.appState.empty():  # Recording is ongoing
             data = stream.read(chunk)  # Read & store 'chunk' sized data from stream
-            self.storedAudio += data
+            self.manager.recording += data
 
         # Closing stream & PyAudio
         stream.stop_stream()
