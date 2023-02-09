@@ -51,11 +51,11 @@ if __name__ == '__main__':
 
     start_time = time.time()
     tts = gTTS(translated, lang=output_lang)    # 3. Synthesizing speech
-    tts.save('test.mp3')
+    tts.save('output.mp3')
     print(f"Step #4 took {time.time() - start_time} seconds!")
 
     print("4. Play translated speech")
 
-    playsound('test.mp3')
+    playsound('output.mp3')
 
 
