@@ -1,14 +1,16 @@
 from queue import Queue
 from gtts import gTTS
 from Microphone import Microphone
-import Transcription as tr
 import whisper
 import Translation as ts
 import time
+from playsound import playsound
 
 class AppManager:
     def __init__(self, model):
-        self.appState = Queue()
+        self.recording = False
+        self.processing = False
+
         self.model = model
         self.recordings = Queue()
         self.transcription = []
@@ -42,7 +44,7 @@ if __name__ == '__main__':
 
     start_time = time.time()
     translated = ts.translate(msg, from_code=input_lang, to_code=output_lang)  # 2. Translating message
-    print(f"Translation: \n" + msg)
+    print(f"Translation: \n" + translated)
     print(f"Step #3 took {time.time() - start_time} seconds!")
 
     print("3. Speech synthesis")
@@ -51,3 +53,9 @@ if __name__ == '__main__':
     tts = gTTS(translated, lang=output_lang)    # 3. Synthesizing speech
     tts.save('test.mp3')
     print(f"Step #4 took {time.time() - start_time} seconds!")
+
+    print("4. Play translated speech")
+
+    playsound('test.mp3')
+
+

@@ -1,4 +1,6 @@
+import time
 from threading import Thread
+from multiprocessing import Process
 import pyaudio
 import speech_recognition as sr
 import Transcription as tr
@@ -17,6 +19,7 @@ class Microphone:
         self.manager = manager
 
     def start_recording(self, lang):
+        self.manager.recording = True
         # Begin recording
         print("Starting...")
 
@@ -27,21 +30,20 @@ class Microphone:
         transcribe.start()  # Starting transcribing
 
     def stop_recording(self):
-        self.manager.appState.get()  # "OFF"
-        while not self.manager.recordings.empty():      # Waiting for transcription to complete
+        self.manager.recording = False  # "OFF"
+        while self.manager.processing:      # Waiting for transcription to complete
             pass
         print("Stopped.")
 
-    def record_microphone(self):  # Reading 1024 frames at a time
+    def record_microphone(self):
         r = sr.Recognizer()
-        r.pause_threshold = 0.5
-        r.energy_threshold = 500
+        r.non_speaking_duration = 0.1
+        r.pause_threshold = 0.3
+        r.energy_threshold = 300
 
         with sr.Microphone(sample_rate=16000) as source:
-            while not self.manager.appState.empty():  # Recording is ongoing
+            while self.manager.recording:  # Recording is ongoing
+                self.manager.processing = True
                 # Recording bytes until pause detected
                 audio = r.listen(source)
-                data = io.BytesIO(audio.get_wav_data()).read()
-
-                # Sending stored bytes into manager recordings
-                self.manager.recordings.put(data)
+                self.manager.recordings.put(audio.get_raw_data()) # Sending stored bytes into manager recordings
