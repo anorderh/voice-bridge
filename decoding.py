@@ -78,7 +78,7 @@ class Decoder:
 
         self.original = " ".join(self.transcriptions)
         self.translate(self.original)
-        self.generateSpeech()
+        return self.generateSpeech()    # Returning file name
 
     def translate(self, text):
         self.translated = GoogleTranslator(source=self.input_lang, target=self.output_lang).translate(text)
@@ -87,5 +87,8 @@ class Decoder:
         tts = gTTS(self.translated, lang=self.output_lang)
 
         # Generate file w/ unique ID
-        tts.save(f"{id}.mp3")
+        identifier = str(self.id) + ".mp3"
+        tts.save(identifier)
         self.id += 1
+
+        return identifier

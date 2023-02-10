@@ -1,5 +1,6 @@
 import whisper
 from playsound import playsound
+from decoding import Decoder
 
 RECORDING_LIMIT = 6
 
@@ -9,6 +10,9 @@ class Base:
 
     cur_recording = None
     model = whisper.load_model("base")
+    decoder = Decoder(model)
+
+    on = False
     # recordings = []
 
     def change_input_lang(self, input_lang):
@@ -30,11 +34,16 @@ class Base:
             # Include 'idx' for playing stored recordings letter
 
     def sendToConsole(self, msg):
-        # Implement later with console box
+        print(msg)
 
-    def start(self):
+    def press(self):
+        if not self.on:
+            self.decoder.start_recording(self.input_lang, self.output_lang)
+        else:
+            self.cur_recording = self.decoder.stop_recording()
 
-    def stop(self):
+            self.sendToConsole(self.decoder.original + "\nto\n" + self.decoder.translated) # Display translation
+            self.play()
 
     # # Implement later for playing saved recordings
     # def save(self):
