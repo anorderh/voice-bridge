@@ -1,6 +1,7 @@
 import whisper
 from playsound import playsound
 from decoding import Decoder
+import GUI
 
 RECORDING_LIMIT = 6
 
@@ -13,7 +14,9 @@ class Base:
     decoder = Decoder(model)
 
     on = False
-    # recordings = []
+
+    def __init__(self):
+        GUI.init(self)
 
     def change_input_lang(self, input_lang):
         self.input_lang = input_lang
@@ -45,7 +48,8 @@ class Base:
             self.sendToConsole(self.decoder.original + "\nto\n" + self.decoder.translated) # Display translation
             self.play()
 
-    # # Implement later for playing saved recordings
-    # def save(self):
+Base()
+
+
 
 
