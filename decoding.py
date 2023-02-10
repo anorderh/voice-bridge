@@ -49,7 +49,7 @@ class Decoder:
                 audio = r.listen(source)  # Blocking until 'pause_threshold' met
                 self.bytes.put(audio.get_raw_data())
 
-    def realtime_transcribe(self, lang):
+    def realtime_transcribe(self):
         while any(self.states.values()):  # If either recording or processing ongoing
             if not self.bytes.empty():  # Skip if no bytes queued
                 frames = self.bytes.get()
@@ -58,7 +58,7 @@ class Decoder:
                 # https://github.com/openai/whisper/discussions/450
                 np_audio = (np.frombuffer(frames, np.int16).flatten().astype(np.float32) / 32768.0)
 
-                result = self.model.transcribe(np_audio, language=lang)
+                result = self.model.transcribe(np_audio, language=self.input_lang)
                 self.transcriptions.append(result["text"])
 
                 # Debug printing
