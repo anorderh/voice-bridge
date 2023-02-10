@@ -1,15 +1,16 @@
 import tkinter
 import customtkinter as ctk
-
+import langs
 
 def init(appBase):
     root = ctk.CTk()
     root.state('zoomed')
+    root.geometry("750x350")
 
     ctk.set_default_color_theme("blue")
 
     # Base frame
-    main = ctk.CTkFrame(master=root)
+    main = ctk.CTkFrame(master=root, width=800)
     main.pack(pady=20, padx=60, fill="both", expand=True)
 
     # Language frame, holding language info
@@ -19,24 +20,24 @@ def init(appBase):
     input_lang_frame = ctk.CTkFrame(langFrame)
 
     # --> Language info variables
-    input_lang_var = ctk.StringVar(value="en")
-    output_lang_var = ctk.StringVar(value="es")
-    appBase.input_lang = input_lang_var
-    appBase.output_lang = output_lang_var
+    input_s, output_s = "english", "spanish"    # Starting values
+    input_lang_var = ctk.StringVar(value=input_s)           # track changes using StringVar
+    output_lang_var = ctk.StringVar(value=output_s)
+    appBase.input_lang, appBase.output_lang = input_lang_var, output_lang_var
 
     input_lang_label = ctk.CTkLabel(input_lang_frame, text="Input").grid(row=0, column=0)
-    input_lang_box = ctk.CTkComboBox(input_lang_frame, values=["en", "es"], variable=input_lang_var).grid(row=1, column=0)
-    input_lang_box.bind("<<ComboboxSelected>>", appBase.change_input_lang)
+    input_lang_box = ctk.CTkComboBox(input_lang_frame, values=langs.codes.keys(), variable=input_lang_var,
+                                     command=appBase.change_input_lang, state="readonly").grid(row=1, column=0)
     input_lang_frame.pack(pady=10, padx=10, side=tkinter.LEFT)
 
-    swap_button = ctk.CTkButton(master=langFrame, text="Swap")
+    swap_button = ctk.CTkButton(master=langFrame, text="Swap", command=appBase.swap)
     swap_button.pack(pady=10, padx=5, side=tkinter.LEFT)
 
     output_lang_frame = ctk.CTkFrame(langFrame)
 
     output_lang_label = ctk.CTkLabel(output_lang_frame, text="Output").grid(row=0, column=0)
-    output_lang_box = ctk.CTkComboBox(output_lang_frame, values=["es", "en"], variable=output_lang_var).grid(row=1, column=0)
-    output_lang_box.bind("<<ComboboxSelected>>", appBase.change_output_lang)
+    output_lang_box = ctk.CTkComboBox(output_lang_frame, values=langs.codes.keys(), variable=output_lang_var,
+                                      command=appBase.change_output_lang, state="readonly").grid(row=1, column=0)
     output_lang_frame.pack(pady=10, padx=10, side=tkinter.LEFT)
 
     # Control Frame

@@ -33,7 +33,7 @@ class Decoder:
         record.start()  # Start recording
 
         transcribe = Thread(target=self.realtime_transcribe)
-        transcribe.start()  # Starting transcribing
+        transcribe.start()  # Start transcribing
 
     def record_microphone(self):
         r = sr.Recognizer()
@@ -76,7 +76,7 @@ class Decoder:
         while self.states["processing"]:  # Waiting for transcription to complete
             pass
 
-        self.original = " ".join(self.transcriptions)
+        self.original = " ".join(self.transcriptions)[1:]   # Remove extra space on end
         self.translate(self.original)
         return self.generateSpeech()    # Returning file name
 
@@ -87,8 +87,12 @@ class Decoder:
         tts = gTTS(self.translated, lang=self.output_lang)
 
         # Generate file w/ unique ID
-        identifier = str(self.id) + ".mp3"
+        identifier = "recordings/" + str(self.id) + ".mp3"
         tts.save(identifier)
         self.id += 1
 
         return identifier
+
+    def reset(self):
+        self.transcriptions = []
+        self.original = self.translated = self.output_lang = self.input_lang = None
