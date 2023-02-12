@@ -6,6 +6,7 @@ def init(appBase):
     root = ctk.CTk()
     root.state('zoomed')
     root.geometry("750x350")
+    root.winfo_toplevel().title("VoiceBridge")
 
     ctk.set_default_color_theme("blue")
 

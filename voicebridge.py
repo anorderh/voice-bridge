@@ -65,8 +65,11 @@ class Base:
             self.on = False
             self.cur_recording = self.decoder.stop_recording()
 
-            self.sendToConsole(f"\n\"{self.decoder.original}\"\n--->\n\"{self.decoder.translated}\"\n")
-            self.play()
+            if not self.cur_recording:
+                self.sendToConsole("No speech detected.")
+            else:
+                self.sendToConsole(f"\n\"{self.decoder.original}\"\n--->\n\"{self.decoder.translated}\"\n")
+                self.play()
 
             self.decoder.reset()
 
