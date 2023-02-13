@@ -1,18 +1,20 @@
 import tkinter
 import customtkinter as ctk
+from PIL import Image
+
 import langs
 
 
 def init(appBase):
     root = ctk.CTk(fg_color="#040329")
     root.state('zoomed')
-    root.geometry("750x400")
+    root.geometry("750x450")
     root.winfo_toplevel().title("VoiceBridge")
 
     ctk.set_default_color_theme("blue")
 
     # Base frame
-    main = ctk.CTkFrame(master=root, width=800, fg_color="#3b3982")
+    main = ctk.CTkFrame(master=root, width=1200, fg_color="#3b3982")
     main.pack(pady=20, padx=60, fill="both", expand=True)
 
     # Language frame, holding language info
@@ -23,7 +25,7 @@ def init(appBase):
 
     # --> Language info variables
     input_s, output_s = "english", "spanish"  # Starting values
-    input_lang_var = ctk.StringVar(value=input_s)  # track changes using StringVar
+    input_lang_var = ctk.StringVar(value=input_s)
     output_lang_var = ctk.StringVar(value=output_s)
     appBase.input_lang, appBase.output_lang = input_lang_var, output_lang_var
 
@@ -47,15 +49,21 @@ def init(appBase):
     console_output = ctk.CTkTextbox(master=control_frame, height=200, state="disabled", activate_scrollbars=False,
                                     fg_color="#070708")
 
+    logo = ctk.CTkImage(dark_image=Image.open("voicebridgeLogo.png"), size=(60, 60))
+
     # --> Button frame
     button_frame = ctk.CTkFrame(control_frame, fg_color="#0c0a40")
+    logo_widget = ctk.CTkLabel(master=button_frame, text="", image=logo)
     record_button = ctk.CTkButton(master=button_frame, text="REC", fg_color="#525252", command=appBase.press)
     play_button = ctk.CTkButton(master=button_frame, text="PLAY", fg_color="green", command=appBase.play)
     save_button = ctk.CTkButton(master=button_frame, text="SAVE", fg_color="#525252", command=appBase.toggle_saving)
+
+    logo_widget.pack(pady=10, padx=10, side=tkinter.TOP)
     record_button.pack(pady=10, side=tkinter.TOP)
     play_button.pack(pady=10, side=tkinter.TOP)
     save_button.pack(pady=10, side=tkinter.TOP)
 
+    # Storing indicators to dynamically change
     appBase.rec_indicator = record_button
     appBase.save_indicator = save_button
 

@@ -1,6 +1,6 @@
-import threading
 from queue import Queue
 from threading import Thread
+import time
 import numpy as np
 import speech_recognition as sr
 from deep_translator import GoogleTranslator
@@ -8,16 +8,27 @@ from gtts import gTTS
 
 
 class Decoder:
-    def __init__(self, model):
+    def __init__(self, model, change_status):
         self.states = Queue()
         self.record_thread = self.transcribe_thread = None
         self.model = model
+        self.recog = self.init_recognizer()
 
         self.bytes = Queue()
         self.transcriptions = []
         self.id = 1
 
-        self.original = self.translated = self.output_lang = self.input_lang = None
+        self.change_status = change_status # To change voicebridge.py mode
+
+        self.original = self.translated = self.filepath = self.output_lang = self.input_lang = None
+
+    def init_recognizer(self):
+        recog = sr.Recognizer()
+        recog.non_speaking_duration = 0.1
+        recog.pause_threshold = 0.3
+        recog.energy_threshold = 500
+
+        return recog
 
     def start_recording(self, input_lang, output_lang):
         """
@@ -39,19 +50,19 @@ class Decoder:
         transcribe.start()  # Start transcribing
 
     def record_microphone(self):
-        r = sr.Recognizer()
         # Speech Recognizer settings
-        r.non_speaking_duration = 0.1
-        r.pause_threshold = 0.3
-        r.energy_threshold = 1000
-
         with sr.Microphone(sample_rate=16000) as source:
-            while not self.states.empty():  # App status check
-                audio = r.listen(source)  # Blocking until 'pause_threshold' met
-                self.bytes.put(audio.get_raw_data())
+            try: # try-block incase timeout occurs
+                while not self.states.empty():  # App status check
+                    audio = self.recog.listen(source=source, timeout=3)  # Blocking until 'pause_threshold' met
+                    self.bytes.put(audio.get_raw_data())
+            except sr.WaitTimeoutError:
+                # Turn off device
+                self.change_status()
+                self.states.get()
 
     def realtime_transcribe(self, force=False):
-        # If app is on or app still recording
+        # If app is on or forced transcription
         while not self.states.empty() or force:
             if not self.bytes.empty():
                 frames = self.bytes.get()
@@ -63,10 +74,8 @@ class Decoder:
                 result = self.model.transcribe(np_audio, language=self.input_lang)
                 self.transcriptions.append(result["text"])
 
-                # Debug printing
-                # print(result["text"])  # Print each excerpt separately
-                # print(" ".join(manager.transcription))      # Print each excerpt together
             force = False
+            time.sleep(0.5) # To reduce frequent iterations
 
     def stop_recording(self):
         """
@@ -84,9 +93,12 @@ class Decoder:
 
         self.original = " ".join(self.transcriptions)[1:]  # Remove extra space on end
         if self.original == "":
-            return False
+            return None
         self.translate(self.original)
-        return self.generateSpeech()  # Returning file name
+        self.generateSpeech()
+
+        # Return filepath, original audio, and translation
+        return self.filepath, self.original, self.translated
 
     def translate(self, text):
         self.translated = GoogleTranslator(source=self.input_lang, target=self.output_lang).translate(text)
@@ -99,9 +111,9 @@ class Decoder:
         tts.save(identifier)
         self.id += 1
 
-        return identifier
+        self.filepath = identifier
 
     def reset(self):
         self.transcriptions.clear()
         self.record_thread = self.transcribe_thread = None
-        self.original = self.translated = self.output_lang = self.input_lang = None
+        self.original = self.translated = self.filepath = self.output_lang = self.input_lang = None
