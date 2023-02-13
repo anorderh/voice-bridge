@@ -6,7 +6,7 @@ import langs
 def init(appBase):
     root = ctk.CTk(fg_color="#040329")
     root.state('zoomed')
-    root.geometry("750x350")
+    root.geometry("750x400")
     root.winfo_toplevel().title("VoiceBridge")
 
     ctk.set_default_color_theme("blue")
@@ -47,13 +47,40 @@ def init(appBase):
     console_output = ctk.CTkTextbox(master=control_frame, height=200, state="disabled", activate_scrollbars=False,
                                     fg_color="#070708")
 
-    # --> # Button frame
+    # --> Button frame
     button_frame = ctk.CTkFrame(control_frame, fg_color="#0c0a40")
-    record_button = ctk.CTkButton(master=button_frame, text="REC", fg_color="red", command=appBase.press)
+    record_button = ctk.CTkButton(master=button_frame, text="REC", fg_color="#525252", command=appBase.press)
     play_button = ctk.CTkButton(master=button_frame, text="PLAY", fg_color="green", command=appBase.play)
+    save_button = ctk.CTkButton(master=button_frame, text="SAVE", fg_color="#525252", command=appBase.toggle_saving)
     record_button.pack(pady=10, side=tkinter.TOP)
-    play_button.pack(pady=10, side=tkinter.BOTTOM)
+    play_button.pack(pady=10, side=tkinter.TOP)
+    save_button.pack(pady=10, side=tkinter.TOP)
 
+    appBase.rec_indicator = record_button
+    appBase.save_indicator = save_button
+
+    # --> Presets
+    preset_frame = ctk.CTkFrame(button_frame, fg_color="#0c0a40")
+    preset1 = ctk.CTkButton(master=preset_frame, text="1", fg_color="#7e7e80", width=25, height=25,
+                            command=lambda: appBase.press_preset(1, preset1))
+    preset2 = ctk.CTkButton(master=preset_frame, text="2", fg_color="#7e7e80", width=25, height=25,
+                            command=lambda: appBase.press_preset(2, preset2))
+    preset3 = ctk.CTkButton(master=preset_frame, text="3", fg_color="#7e7e80", width=25, height=25,
+                            command=lambda: appBase.press_preset(3, preset3))
+    preset4 = ctk.CTkButton(master=preset_frame, text="4", fg_color="#7e7e80", width=25, height=25,
+                            command=lambda: appBase.press_preset(4, preset4))
+    preset5 = ctk.CTkButton(master=preset_frame, text="5", fg_color="#7e7e80", width=25, height=25,
+                            command=lambda: appBase.press_preset(5, preset5))
+    preset6 = ctk.CTkButton(master=preset_frame, text="6", fg_color="#7e7e80", width=25, height=25,
+                            command=lambda: appBase.press_preset(6, preset6))
+    preset1.pack(side=tkinter.LEFT)
+    preset2.pack(side=tkinter.LEFT)
+    preset3.pack(side=tkinter.LEFT)
+    preset4.pack(side=tkinter.LEFT)
+    preset5.pack(side=tkinter.LEFT)
+    preset6.pack(side=tkinter.LEFT)
+
+    preset_frame.pack(pady=10, padx=10, side=tkinter.BOTTOM)
     console_output.pack(pady=10, padx=10, side=tkinter.LEFT, fill="both", expand=1)
     button_frame.pack(pady=10, padx=10, side=tkinter.RIGHT)
     control_frame.pack(pady=10, padx=10, side=tkinter.BOTTOM, fill="both", expand=1)

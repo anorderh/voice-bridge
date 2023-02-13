@@ -43,7 +43,7 @@ class Decoder:
         # Speech Recognizer settings
         r.non_speaking_duration = 0.1
         r.pause_threshold = 0.3
-        r.energy_threshold = 300
+        r.energy_threshold = 1000
 
         with sr.Microphone(sample_rate=16000) as source:
             while not self.states.empty():  # App status check
