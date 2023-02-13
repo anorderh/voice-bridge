@@ -2,8 +2,6 @@
 
 *A speech-to-speech translation desktop app powered by Whisper and Google Translate*
 
----
-
 ![GitHub last commit](https://img.shields.io/github/last-commit/anorderh/voice-bridge)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/anorderh/voice-bridge)
 ![GitHub contributors](https://img.shields.io/github/contributors/anorderh/voice-bridge)
@@ -11,14 +9,14 @@
 
 ## Goal
 
-This repo's goal was to develop an appliction testing Whisper's capabilities for real-time voice transcription. Implementing [SpeechRecognizers](https://github.com/Uberi/speech_recognition) made this possible by processing audio input per lingual pauses.
+This repo's goal was to develop an appliction testing Whisper's capabilities for real-time voice transcription. Implementing [SpeechRecognizers](https://github.com/Uberi/speech_recognition) made this possible by processing audio input per lingual pauses. 
 
 ## Usage
 
-1. Run the executable 'voicebridge'.
+1. Run the executable `voicebridge`.
 2. Select your *input* and *output* languages.
 3. Generate `.mp3` files of translated speech.
-4. Save and replay up to ==7 different recordings at a time==.
+4. Save and replay up to <u>7 different recordings at a time</u>.
 
 ## Requirements
 
