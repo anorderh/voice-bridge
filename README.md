@@ -7,8 +7,6 @@
 ![GitHub contributors](https://img.shields.io/github/contributors/anorderh/voice-bridge)
 ![GitHub](https://img.shields.io/github/license/anorderh/voice-bridge)
 
-![video](assets/demo.mp4)
-
 ## Goal
 
 This repo's goal was to develop an appliction testing Whisper's capabilities for real-time voice transcription. Implementing python package `speech_recognition` made this possible by processing audio input per lingual pauses.
@@ -44,7 +42,7 @@ https://user-images.githubusercontent.com/60157725/218612931-ccb5137e-4fa6-429f-
 
 ## Educational
 
-    This application utilizes multithreading to simutaneously record and transcribe audio. The front-end is implemented using Python package customtkinter. Object-orientated design is demonstrated via `Base` and `Decoder` objects. The app has integration with Google Translate APIs and invokes offline package `openai-whisper`. This application was compiled to be standalone using  `py2app`. 
+    This application utilizes multithreading to simutaneously record and transcribe audio. The front-end is implemented using Python package customtkinter. Object-orientated design is demonstrated via `Base` and `Decoder` objects. The app has integration with Google Translate APIs and invokes offline package `openai-whisper`. This application was compiled to be standalone using `py2app`. 
 
 ## Limitations
 
