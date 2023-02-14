@@ -17,11 +17,11 @@ This repo's goal was to develop an appliction testing Whisper's capabilities for
 
 1. Record and efficiently transcribe, translate, and synthesize speech for CPU-dependent hardware between <u>85 different languages.</u>
 
-
+https://user-images.githubusercontent.com/60157725/218612902-e786e6b6-b968-49bb-b613-83120d98c415.mov
 
 2. Save up to <u>7 different recordings</u> at a time.
 
-
+https://user-images.githubusercontent.com/60157725/218612931-ccb5137e-4fa6-429f-aa93-2a6252cf5c52.mov
 
 ## Usage
 
