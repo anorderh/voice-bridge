@@ -91,7 +91,7 @@ class Decoder:
         # Waiting for threads to finish
         self.disable_mic()
         print("recording joined")
-        faulthandler.dump_traceback()
+        # faulthandler.dump_traceback() For debugging threads
 
         self.transcribe_thread.join()
         print("transcribing joined")
