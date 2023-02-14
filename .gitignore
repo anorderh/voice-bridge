@@ -3,6 +3,9 @@
 workspace.xml
 tasks.xml
 
+# Created recordings
+recordings/
+
 # Environments
 .env
 .venv

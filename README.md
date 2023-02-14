@@ -1,4 +1,4 @@
-# ![voicebridge logo](voicebridge.png)
+# ![voicebridge logo](assets/voicebridge.png)
 
 *A speech-to-speech translation desktop app powered by Whisper and Google Translate*
 
@@ -6,6 +6,8 @@
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/anorderh/voice-bridge)
 ![GitHub contributors](https://img.shields.io/github/contributors/anorderh/voice-bridge)
 ![GitHub](https://img.shields.io/github/license/anorderh/voice-bridge)
+
+![video](assets/demo.mp4)
 
 ## Goal
 

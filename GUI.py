@@ -1,15 +1,21 @@
 import tkinter
 import customtkinter as ctk
-from PIL import Image
+from PIL import Image, ImageTk
+from sys import platform
 
 import langs
-
 
 def init(appBase):
     root = ctk.CTk(fg_color="#040329")
     root.state('zoomed')
     root.geometry("750x450")
     root.winfo_toplevel().title("VoiceBridge")
+
+    # Setting logo
+    logo_pil = Image.open("assets/voicebridgeLogo.png")
+    icon = ImageTk.PhotoImage(logo_pil)
+    root.wm_iconphoto(False, icon)
+    root.wm_title("VoiceBridge")
 
     ctk.set_default_color_theme("blue")
 
@@ -49,7 +55,7 @@ def init(appBase):
     console_output = ctk.CTkTextbox(master=control_frame, height=200, state="disabled", activate_scrollbars=False,
                                     fg_color="#070708")
 
-    logo = ctk.CTkImage(dark_image=Image.open("voicebridgeLogo.png"), size=(60, 60))
+    logo = ctk.CTkImage(dark_image=logo_pil, size=(60, 60))
 
     # --> Button frame
     button_frame = ctk.CTkFrame(control_frame, fg_color="#0c0a40")

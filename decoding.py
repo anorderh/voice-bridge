@@ -1,3 +1,4 @@
+import faulthandler
 from queue import Queue
 from threading import Thread
 import time
@@ -18,7 +19,8 @@ class Decoder:
         self.transcriptions = []
         self.id = 1
 
-        self.change_status = change_status # To change voicebridge.py mode
+        self.disable_mic = None
+        self.change_status = change_status  # To change voicebridge.py mode
 
         self.original = self.translated = self.filepath = self.output_lang = self.input_lang = None
 
@@ -42,28 +44,30 @@ class Decoder:
         self.input_lang = input_lang
         self.output_lang = output_lang
 
-        record = Thread(target=self.record_microphone)
+        self.record_microphone()
         transcribe = Thread(target=self.realtime_transcribe)
-        self.record_thread, self.transcribe_thread = record, transcribe
+        self.transcribe_thread = transcribe
 
-        record.start()  # Start recording
         transcribe.start()  # Start transcribing
 
     def record_microphone(self):
-        # Speech Recognizer settings
-        with sr.Microphone(sample_rate=16000) as source:
-            try: # try-block incase timeout occurs
-                while not self.states.empty():  # App status check
-                    audio = self.recog.listen(source=source, timeout=3)  # Blocking until 'pause_threshold' met
-                    self.bytes.put(audio.get_raw_data())
-            except sr.WaitTimeoutError:
-                # Turn off device
-                self.change_status()
-                self.states.get()
+        try:  # try-block incase timeout
+            mic = sr.Microphone(sample_rate=16000)
+            # Spawns new thread per Speech phrase - "disable_mic" pulled
+            self.disable_mic = self.recog.listen_in_background(source=mic, callback=self.handle_audio_segment)
+        except sr.WaitTimeoutError:
+            # Turn off device
+            self.change_status()
+            self.disable_mic()
+            self.states.get()
+
+    def handle_audio_segment(self, recog, audio):
+        self.bytes.put(audio.get_raw_data())
 
     def realtime_transcribe(self, force=False):
         # If app is on or forced transcription
         while not self.states.empty() or force:
+            print("transcribe")
             if not self.bytes.empty():
                 frames = self.bytes.get()
 
@@ -75,18 +79,22 @@ class Decoder:
                 self.transcriptions.append(result["text"])
 
             force = False
-            time.sleep(0.5) # To reduce frequent iterations
+            time.sleep(0.5)  # To reduce frequent iterations
 
     def stop_recording(self):
         """
         Stop recording, translate whole transcription, and generate speech.
         :return:
         """
-        self.states.get() # "OFF"
+        self.states.get()  # "OFF"
 
         # Waiting for threads to finish
-        self.record_thread.join()
+        self.disable_mic()
+        print("recording joined")
+        faulthandler.dump_traceback()
+
         self.transcribe_thread.join()
+        print("transcribing joined")
 
         if not self.bytes.empty():  # Completing transcription if bytes present
             self.realtime_transcribe(True)
@@ -115,5 +123,5 @@ class Decoder:
 
     def reset(self):
         self.transcriptions.clear()
-        self.record_thread = self.transcribe_thread = None
+        self.transcribe_thread = None
         self.original = self.translated = self.filepath = self.output_lang = self.input_lang = None
