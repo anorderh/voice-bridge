@@ -1,6 +1,6 @@
 # ![voicebridge logo](assets/voicebridge.png)
 
-*A speech-to-speech translation desktop app powered by Whisper and Google Translate*
+*A speech-to-speech translation MacOS app powered by Whisper and Google Translate*
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/anorderh/voice-bridge)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/anorderh/voice-bridge)
@@ -25,7 +25,7 @@ https://user-images.githubusercontent.com/60157725/218612931-ccb5137e-4fa6-429f-
 
 ## Usage
 
-1. Run the executable `voicebridge`.
+1. Run the application `voicebridge_1.0.0_darwin-x86_64`.
 2. Select your *input* and *output* languages.
 3. Press REC to start recording.
 4. Press again to stop recording.
@@ -37,14 +37,14 @@ https://user-images.githubusercontent.com/60157725/218612931-ccb5137e-4fa6-429f-
 ## Requirements
 
 - [OpenAI Whisper (Open-vino)](https://github.com/zhuzilin/whisper-openvino)
-- deep_translator
+- [deep_translator](https://github.com/nidhaloff/deep-translator)
 - [speech_recognition](https://github.com/Uberi/speech_recognition)
-- gTTs
-- tkinter
+- [gTTS](https://github.com/pndurette/gTTS)
+- [customtkinter](https://github.com/TomSchimansky/CustomTkinter)
 
 ## Educational
 
-    This application utilizes multithreading to simutaneously record and transcribe audio. The front-end is implemented using Python package [tkinter](https://github.com/TomSchimansky/CustomTkinter). Object-orientated design is demonstrated via `Base` and `Decoder` objects. The app has integration with Google Translate APIs and invokes offline package `openai-whisper`.
+    This application utilizes multithreading to simutaneously record and transcribe audio. The front-end is implemented using Python package customtkinter. Object-orientated design is demonstrated via `Base` and `Decoder` objects. The app has integration with Google Translate APIs and invokes offline package `openai-whisper`. This application was compiled to be standalone using  `py2app`. 
 
 ## Limitations
 

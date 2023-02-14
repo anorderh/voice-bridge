@@ -19,7 +19,7 @@ class Base:
     model = whisper.load_model("base")
     decoder = None
 
-    # GUI components
+    # GUI componentsç
     gui = None
     console = None
     rec_indicator = None
